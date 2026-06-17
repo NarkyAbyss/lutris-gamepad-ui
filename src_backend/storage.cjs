@@ -33,7 +33,7 @@ function migrateData(newPath) {
                 fs.rmSync(oldPath, { recursive: true, force: true });
                 console.log("Data successfully migrated via copy/delete fallback to:", newPath);
             } else {
-                throw renameError;
+                throw renameSyncError;
             }
         }
     } catch (error) {
