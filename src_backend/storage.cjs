@@ -15,10 +15,6 @@ function migrateData(newPath) {
         console.log("No old data found to migrate.");
         return;
     }
-    if (fs.existsSync(newPath)) {
-        console.log("Data already exists at the new location. Skipping migration to prevent overwriting.");
-        return;
-    }
 
     try {
         // fs.renameSync works across the same drive. 
