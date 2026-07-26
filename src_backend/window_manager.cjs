@@ -167,7 +167,11 @@ function createWindow(onWindowClosedCallback) {
 
   session.defaultSession.webRequest.onBeforeRequest((details, callback) => {
     const requestProtocol = new URL(details.url).protocol;
-    callback({ cancel: !allowedProtocols.has(requestProtocol) });
+
+    let allowed = allowedProtocols.has(requestProtocol)
+    allowed |= requestProtocol === "file:" && details.webContentsId === undefined
+
+    callback({ cancel: !allowed });
   });
 
   protocol.handle("app", (request) => {
@@ -273,6 +277,14 @@ function createWindow(onWindowClosedCallback) {
       onWindowClosedCallback();
     }
   });
+
+  win.on("ready-to-show", () => {
+    win.restore();
+    win.focus();
+    if (fullscreen) {
+      win.setFullScreen(true);
+    }
+  })
 
   win.webContents.once("did-stop-loading", () => {
     initializeThemeManager();

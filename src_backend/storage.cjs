@@ -40,11 +40,22 @@ function migrateLegacyDirectory(modernDirectory, legacyDirectory) {
   fs.rmdirSync(legacyDirectory, { force: true, recursive: true });
 }
 
+function deleteLegacyJunkChromiumSessionFiles() {
+  const dir = path.join(app.getPath("appData"), "lutris-gamepad-ui");
+
+  if (!fs.existsSync(dir)) {
+    return;
+  }
+
+  fs.rmdirSync(dir, { force: true, recursive: true });
+}
+
 function migrateAndGetHomeDirectory() {
   const modernDirectory = getModernStorageDirectory();
   const legacyDirectory = getLegacyStorageDirectory();
 
   migrateLegacyDirectory(modernDirectory, legacyDirectory);
+  deleteLegacyJunkChromiumSessionFiles();
 
   return modernDirectory;
 }
